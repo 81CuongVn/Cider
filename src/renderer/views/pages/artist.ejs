@@ -12,7 +12,7 @@
                         <div class="artist-image" v-if="!(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9))">
                             <mediaitem-artwork
                                     shadow="large"
-                                    :url="artistimage"
+                                    :url="data.attributes.artwork ? data.attributes.artwork.url : ''"
                                     size="190" type="artists"></mediaitem-artwork>
                             <button class="overlay-play"  @click="app.mk.setStationQueue({artist:'a-'+data.id}).then(()=>{
                             app.mk.play()
@@ -35,7 +35,7 @@
                 </button>
             </div>
             <div class="artworkContainer" v-if="!(data.attributes.editorialVideo && (data.attributes.editorialVideo.motionArtistWide16x9 || data.attributes.editorialVideo.motionArtistFullscreen16x9))">
-                <artwork-material :url="data.attributes.artwork?.url ?? ''" size="190" images="1"></artwork-material>
+                <artwork-material :url="data.attributes.artwork.url" size="190" images="1"></artwork-material>
             </div>
         </div>
         <div class="floating-header" :style="{opacity: (headerVisible ? 0 : 1),'pointer-events': (headerVisible ? 'none' : '')}">
@@ -65,19 +65,19 @@
                         </mediaitem-square>
                     </div>
                 </div>
-                <div class="col-sm-9" v-if="data.views['top-songs']">
+                <div class="col-sm-12" v-if="data.views['top-songs']">
                     <div class="row">
                         <div class="col" style="padding:0;">
                             <h3>{{app.getLz('term.topSongs')}}</h3>
                         </div>
-                        <div class="col-auto flex-center" v-if="data.views['top-songs'].data.length >= 16" style="padding:0;">
+                        <div class="col-auto flex-center" v-if="data.views['top-songs'].data.length >= 20" style="padding:0;">
                             <button class="cd-btn-seeall" @click="app.showArtistView(data.id, data.attributes.name + ' - Top Songs', 'top-songs')">{{app.getLz('term.seeAll')}}</button>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col flex-center" style="padding:0;">
                             <div class="mediaitem-list-item__grid">
-                                <listitem-horizontal :items="data.views['top-songs'].data.limit(16)">
+                                <listitem-horizontal :items="data.views['top-songs'].data.limit(20)">
                                 </listitem-horizontal>
                             </div>                                
                         </div>
@@ -143,17 +143,8 @@
             return {
                 topSongsExpanded: false,
                 app: this.$root,
-                headerVisible: true,
-                artistimage : ''
+                headerVisible: true
             }
-        },
-        mounted: async function () {
-             this.artistimage = this.data.attributes?.artwork ? this.data.attributes.artwork?.url : ''
-
-            if (this.artistimage == '' && this.data.id != null){
-                 this.artistimage = await this.app.loadArtistImage(this.data.id)
-            }
-
         },
         methods: {
             isHeaderVisible(visible) {
