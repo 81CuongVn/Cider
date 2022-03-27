@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "target": "esnext",
+    "module": "commonjs",
+    "allowJs": true,
+    "noImplicitAny": true,
+    "strict": true,
+    "sourceMap": true,
+    "outDir": "./build",
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*"]
+    },
+    "allowSyntheticDefaultImports": true,
+    "typeRoots": [
+      "node_modules/musickit-typescript",
+      "node_modules/@types"
+    ]
+  },
+  "include": [
+    "src/main/**/*",
+  ]
+}
