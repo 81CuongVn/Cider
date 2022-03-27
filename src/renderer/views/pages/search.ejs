@@ -88,7 +88,7 @@
                     <mediaitem-square :kind="'385'" size="600"
                     :item="item ? (item.attributes.kind ? item : ((item.relationships && item.relationships.contents ) ? item.relationships.contents.data[0] : item)) : []"
                     :imagesize="800"
-                    v-for="item of getFlattenedCategories()">
+                    v-for="item of categoriesView"></mediaitem-square>
                 </div>
            </div>
         </div>    

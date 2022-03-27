@@ -1518,6 +1518,7 @@ const app = new Vue({
                     platform: "auto",
                     include: "grouping,playlists",
                     extend: "editorialArtwork",
+                    "extend['playlists']": "artwork",
                     "art[url]": "f"
                 });
                 window.location.hash = `${kind}/${id}`
@@ -1557,6 +1558,16 @@ const app = new Vue({
                 if (kind.includes("playlist")) {
                     params["include"] = "tracks";
                 }
+                if (kind.includes("appleCurator")) {
+                    params = {
+                        platform: "auto",
+                        include: "grouping,playlists",
+                        extend: "editorialArtwork",
+                        "extend['playlists']": "artwork",
+                        "art[url]": "f"
+                    }
+                }
+                console.log('type', kind)
                 if (kind.includes("album")) {
                     params["include[albums]"] = "artists"
                     params["fields[artists]"] = "name,url"

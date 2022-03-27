@@ -27,7 +27,7 @@
             </template>
         </template> 
         <template v-if="data.relationships && data.relationships.playlists">
-            <mediaitem-square  :size="'300'" :item="playlist" v-for="(playlist,index) in data.relationships.playlists.data">
+            <mediaitem-square :key="playlist.id" :size="'300'" :item="playlist" v-for="(playlist,index) in data.relationships.playlists.data">
             </mediaitem-square>
         </template>    
     </div>
@@ -42,5 +42,7 @@
                 app: this.$root
             }
         },
+        mounted(){
+        }
     })    
 </script>
