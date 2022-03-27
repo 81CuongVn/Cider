@@ -44,6 +44,7 @@ export class BrowserWindow {
                 "pages/library-albums",
                 "pages/library-artists",
                 "pages/browse",
+                "pages/browse-normalapi",
                 "pages/settings",
                 "pages/listen_now",
                 "pages/home",
@@ -160,11 +161,18 @@ export class BrowserWindow {
                     page: "curator_",
                     component: `<cider-recordlabel :data="showingPlaylist"></cider-recordlabel>`,
                     condition: `page.includes('curator_')`
-                }, {
+                }, 
+                // {
+                //     page: "browsepage",
+                //     component: `<cider-browse :data="browsepage"></cider-browse>`,
+                //     condition: `page == 'browse'`,
+                //     onEnter: `getBrowsePage();`
+                // }, 
+                {
                     page: "browsepage",
-                    component: `<cider-browse :data="browsepage"></cider-browse>`,
+                    component: `<cider-browse-normalapi></cider-browse-normalapi>`,
                     condition: `page == 'browse'`,
-                    onEnter: `getBrowsePage();`
+                    onEnter: ``
                 }, {
                     page: "listen_now",
                     component: `<cider-listen-now :data="listennow"></cider-listen-now>`,

@@ -1,0 +1,72 @@
+<script type="text/x-template" id="cider-browse-normalapi">
+    <div class="content-inner">
+        <h1 class="header-text">{{$root.getLz("term.browse")}}</h1>
+            <template v-if="songs != []"> 
+                <div class="row">
+                    <div class="col">
+                        <h3>{{ songs.name ?? ""}}</h3>
+                    </div>
+                    <div class="col-auto flex-center" v-if="songs.data.length > 12">
+                        <button class="cd-btn-seeall" @click="app.showCollection((songs ?? []), songs.name ?? '', 'default')" >{{app.getLz('term.seeAll')}}</button>
+                    </div>
+                </div>
+                    <div class="mediaitem-list-item__grid">
+                        <listitem-horizontal :items="(songs?.data ?? []).limit(12)">
+                        </listitem-horizontal>
+                    </div>
+            </template>
+            <template v-if="albums != []">
+                <div class="row">
+                    <div class="col">
+                        <h3>{{ albums.name ?? ""}}</h3>
+                    </div>
+                    <div class="col-auto flex-center" v-if="songs.data.length > 12">
+                        <button class="cd-btn-seeall" @click="app.showCollection((albums ?? []), albums.name ?? '', 'default')" >{{app.getLz('term.seeAll')}}</button>
+                    </div>
+                </div>
+                <mediaitem-scroller-horizontal-large
+                                :items="(albums?.data ?? []).limit(10)"></mediaitem-scroller-horizontal-large>
+            </template>
+            <template v-if="playlists != []">
+                <div class="row">
+                    <div class="col">
+                        <h3>{{ playlists.name ?? ""}}</h3>
+                    </div>
+                    <div class="col-auto flex-center" v-if="playlists.data.length > 12">
+                        <button class="cd-btn-seeall" @click="app.showCollection((playlists ?? []), playlists.name ?? '', 'default')" >{{app.getLz('term.seeAll')}}</button>
+                    </div>
+                </div>
+                <mediaitem-scroller-horizontal-large
+                                :items="(playlists?.data ?? []).limit(10)"></mediaitem-scroller-horizontal-large>
+            </template>
+           
+    </div>
+</script>
+
+<script>
+    Vue.component('cider-browse-normalapi', {
+        template: "#cider-browse-normalapi",
+        data: function () {
+            return {
+                app: this.$root,
+                songs: [],
+                albums: [],
+                playlists: [],
+            }
+        },
+        mounted(){
+            this.getData();
+        },
+        methods: {
+            getData(){
+                let self = this;
+                app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}/charts?types=songs%2Calbums%2Cplaylists&limit=36`).then(res => {
+                    let page = res.data?.results ?? [];
+                    self.songs = page.songs[0] ?? [];
+                    self.albums = page.albums[0] ?? [];
+                    self.playlists = page.playlists[0] ?? [];
+                })
+            }
+        }
+    })    
+</script>
