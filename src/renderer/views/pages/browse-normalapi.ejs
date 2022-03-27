@@ -27,6 +27,18 @@
                 <mediaitem-scroller-horizontal-large
                                 :items="(albums?.data ?? []).limit(10)"></mediaitem-scroller-horizontal-large>
             </template>
+            <template v-if="categories != []">
+                <div class="row">
+                    <div class="col">
+                        <h3>{{$root.getLz("term.topGenres")}}</h3>
+                    </div>
+                    <!-- <div class="col-auto flex-center" v-if="categories.data.length > 12">
+                        <button class="cd-btn-seeall" @click="app.showCollection((categories ?? []), $root.getLz('term.topGenres') ?? '', 'default')" >{{app.getLz('term.seeAll')}}</button>
+                    </div> -->
+                </div>
+                <mediaitem-scroller-horizontal-mvview :kind="'385'" 
+                                :items="(categories?.data ?? []).limit(10)"></mediaitem-scroller-horizontal-mvview >
+            </template>
             <template v-if="playlists != []">
                 <div class="row">
                     <div class="col">
@@ -52,19 +64,72 @@
                 songs: [],
                 albums: [],
                 playlists: [],
+                categories: [],
             }
         },
-        mounted(){
+        mounted() {
             this.getData();
         },
         methods: {
-            getData(){
+            getData() {
                 let self = this;
                 app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}/charts?types=songs%2Calbums%2Cplaylists&limit=36`).then(res => {
                     let page = res.data?.results ?? [];
                     self.songs = page.songs[0] ?? [];
                     self.albums = page.albums[0] ?? [];
                     self.playlists = page.playlists[0] ?? [];
+                })
+                app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}/apple-curators`, {
+                    ids: [
+                        "1514706977",
+                        "1526756058",
+                        "976439548",
+                        "988658197",
+                        "1526866702",
+                        "1526866635",
+                        "1526866514",
+                        "1526866189",
+                        "1528869584",
+                        "1441811365",
+                        "1558257257",
+                        "989061415",
+                        "989010186",
+                        "1558256251",
+                        "1558256771",
+                        "1558256865",
+                        "1526866649",
+                        "1558257443",
+                        "1558257095",
+                        "1558256919",
+                        "1558257331",
+                        "1558257146",
+                        "1558257035",
+                        "1558256909",
+                        "1531539531",
+                        "1482068485",
+                        "976439541",
+                        "982356297",
+                        "982307152",
+                        "989058908",
+                        "988658199",
+                        "988656613",
+                        "1479949880",
+                        "987714244",
+                        "976439534",
+                        "1013624291",
+                        "976439536",
+                        "1013613723",
+                        "1531542847",
+                        "976439535",
+                        "1554938339",
+                        "983062953",
+                        "982346310",
+                        "1232062136",
+                        "982356299"
+                    ]
+                }).then(res => {
+                    console.log(res)
+                    self.categories = res.data ?? [];
                 })
             }
         }

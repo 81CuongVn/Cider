@@ -1,6 +1,6 @@
 <script type="text/x-template" id="listennow-child">
-    <div v-observe-visibility="{callback: visibilityChanged}">
-    <template v-if="isVisible && recom.attributes.display?.kind != 'MusicSuperHeroShelf'">    
+    <div v-observe-visibility="{callback: visibilityChanged}" v-if="isVisible && recom.attributes.display?.kind != 'MusicSuperHeroShelf' && recom.attributes?.title != null">
+    <template v-if="isVisible && recom.attributes.display?.kind != 'MusicSuperHeroShelf' && recom.attributes?.title != null">    
         <div class="row">
             <div class="col">
                 <h3>{{ recom.attributes.title ? recom.attributes.title.stringForDisplay : "  "}}</h3>

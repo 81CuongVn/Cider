@@ -116,7 +116,55 @@
             },
             async getCategories() {
                 if (this.categoriesView != [] && this.categoriesView.length > 0) { this.categoriesReady = true; return await true; } else {
-                    let response = await this.app.mk.api.music(`/v1/recommendations/${this.app.mk.storefrontId}?timezone=${encodeURIComponent(this.app.formatTimezoneOffset())}&name=search-landing&platform=auto&extend=editorialArtwork&art%5Burl%5D=f%2Cc&types=editorial-items%2Capple-curators%2Cactivities&l=${this.$root.mklang}`);
+                   let response = await app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}/apple-curators`, {
+                        ids: [
+                            "1514706977",
+                            "1526756058",
+                            "976439548",
+                            "988658197",
+                            "1526866702",
+                            "1526866635",
+                            "1526866514",
+                            "1526866189",
+                            "1528869584",
+                            "1441811365",
+                            "1558257257",
+                            "989061415",
+                            "989010186",
+                            "1558256251",
+                            "1558256771",
+                            "1558256865",
+                            "1526866649",
+                            "1558257443",
+                            "1558257095",
+                            "1558256919",
+                            "1558257331",
+                            "1558257146",
+                            "1558257035",
+                            "1558256909",
+                            "1531539531",
+                            "1482068485",
+                            "976439541",
+                            "982356297",
+                            "982307152",
+                            "989058908",
+                            "988658199",
+                            "988656613",
+                            "1479949880",
+                            "987714244",
+                            "976439534",
+                            "1013624291",
+                            "976439536",
+                            "1013613723",
+                            "1531542847",
+                            "976439535",
+                            "1554938339",
+                            "983062953",
+                            "982346310",
+                            "1232062136",
+                            "982356299"
+                        ]
+                    })
                     this.categoriesView = response.data.data;
                     console.log(this.categoriesView)
                     this.categoriesReady = true;
@@ -124,15 +172,7 @@
                 }
             },
             getFlattenedCategories() {
-                let flattened = [];
-                for (let i = 0; i < this.categoriesView.length; i++) {
-                    if (this.categoriesView[i].relationships && this.categoriesView[i].relationships.contents && this.categoriesView[i].relationships.contents.data) {
-                        for (let j = 0; j < this.categoriesView[i].relationships.contents.data.length; j++) {
-                            if (this.categoriesView[i].relationships.contents.data[j].type != 'editorial-items')
-                            flattened.push(this.categoriesView[i].relationships.contents.data[j])
-                        }
-                    }
-                }
+                let flattened = this.categoriesView;
                 return flattened;
             }
         }

@@ -18,25 +18,27 @@
                 type: Object,
                 required: true
             },
-            artistimage : '',
         },
         data: function() {
             return {
                 artist: {
                     id: null
-                }
+                },
+                artistimage : '',
             }
+            
         },
         template: '#artist-chip',
         async mounted() {
+            let self = this;
             let artistId = this.item.id
             if(typeof this.item.relationships == "object") {
                 artistId = this.item.relationships.catalog.data[0].id
             }
-            app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}/artists/${artistId}`).then(response => {
-                this.artist = response.data.data[0];
-                if (this.artistimage == '' && artistId != null){
-                    this.artistimage = (await this.$root.loadArtistImage(artistId) ?? '').replace('300x300','50x50')
+            this.$root.mk.api.music(`/v1/catalog/${this.$root.mk.storefrontId}/artists/${artistId}`).then(async (response) => {
+                self.artist = response.data.data[0];
+                if (self.artistimage == '' && artistId != null){
+                    self.artistimage = (await this.$root.loadArtistImage(artistId) ?? '').replace('300x300','50x50')
                     
                 }
             });

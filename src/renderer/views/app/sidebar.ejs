@@ -52,8 +52,8 @@
                               page="library-artists"></sidebar-library-item>
         <sidebar-library-item :name="$root.getLz('term.videos')" svg-icon="./assets/feather/video.svg"
                               page="library-videos"></sidebar-library-item>
-        <sidebar-library-item :name="$root.getLz('term.podcasts')" svg-icon="./assets/feather/mic.svg"
-                              page="podcasts">
+        <!-- <sidebar-library-item :name="$root.getLz('term.podcasts')" svg-icon="./assets/feather/mic.svg"
+                              page="podcasts"> -->
         </sidebar-library-item>
         <template v-if="getPlaylistFolderChildren('p.applemusic').length != 0">
             <div class="app-sidebar-header-text" @contextmenu="playlistHeaderContextMenu">

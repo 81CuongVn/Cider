@@ -50,11 +50,11 @@
             <!--                    </div>-->
             <!--                </div>-->
             <!--            </div>-->
-            <div class="row" v-if="!seenReplay">
+            <!-- <div class="row" v-if="!seenReplay">
                 <div class="col">
                     <button class="md-btn md-btn-block md-btn-replay--hero" @click="$root.appRoute('replay')">{{$root.getLz('term.replay')}} {{ year }}</button>
                 </div>
-            </div>
+            </div> -->
             <div class="row">
                 <div class="col">
                     <div class="row">
@@ -216,13 +216,13 @@
             async getListenNowData() {
                 let self = this
                 this.app.mk.api.music(`/v1/me/recommendations?timezone=${encodeURIComponent(app.formatTimezoneOffset())}&name=listen-now&with=friendsMix,library&art[social-profiles:url]=c&art[url]=c,f&omit[resource]=autos&relate[editorial-items]=contents&extend=editorialCard,editorialVideo&extend[albums]=artistUrl&extend[library-albums]=artistUrl,editorialVideo&extend[playlists]=artistNames,editorialArtwork,editorialVideo&extend[library-playlists]=artistNames,editorialArtwork,editorialVideo&extend[social-profiles]=topGenreNames&include[albums]=artists&include[songs]=artists&include[music-videos]=artists&fields[albums]=artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialVideo,name,playParams,releaseDate,url&fields[artists]=name,url&extend[stations]=airDate,supportsAirTimeUpdates&meta[stations]=inflectionPoints&types=artists,albums,editorial-items,library-albums,library-playlists,music-videos,playlists,stations,activities,apple-curators,curators&platform=auto&l=${this.$root.mklang}`).then((data) => {
-                    console.log(data.data.data[1])
                     try {
                         self.madeForYou = data.data.data.filter(section => {
-                            if (section.meta.metrics.moduleType == "6") {
+                            if (section.meta?.metrics?.moduleType == "6" || section.id?.startsWith('6-')) {
                                 return section
                             };
                         })[0].relationships.contents.data
+                        console.log(self.madeForYou)
                     } catch (err) {}
                     self.sectionsReady.push("madeForYou")
 
