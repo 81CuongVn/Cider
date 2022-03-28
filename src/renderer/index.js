@@ -120,7 +120,7 @@ document.addEventListener('musickitloaded', function () {
     console.log('MusicKit loaded')
     // MusicKit global is now defined
     function initMusicKit() {
-        let parsedJson = JSON.parse(this.responseText)
+        //let parsedJson = JSON.parse(this.responseText)
         MusicKit.configure({
             developerToken: "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlhXM0w4WVQzUzQifQ.eyJpYXQiOjE2NDU3Njg0MzUsImV4cCI6MTY2MTMyMDQzNSwiaXNzIjoiOFIyM0oyODM1RCJ9.h54gKwfUTR4AOsf_n00a5DKvTfTqbcZJGrxCOvJWFMHhKll-jTb-NqNzMX4Zi0EsCPfFcEueShdsTRE1rJzHzw",
             app: {

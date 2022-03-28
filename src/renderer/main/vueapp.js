@@ -1572,6 +1572,7 @@ const app = new Vue({
                     params["include[albums]"] = "artists"
                     params["fields[artists]"] = "name,url"
                     params["omit[resource]"] = "autos"
+                    params["meta[albums:tracks]"] = 'popularity'
                     params["fields[albums]"] = "artistName,artistUrl,artwork,contentRating,editorialArtwork,editorialNotes,editorialVideo,name,playParams,releaseDate,url,copyright"
                 }
 
