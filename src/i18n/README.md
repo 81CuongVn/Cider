@@ -172,3 +172,31 @@ Update 19/2/2022 21:00 UTC
 * `settings.option.visual.theme.github.install.confirm`: Added for `en_US`
 * `settings.option.experimental.unknownPlugin`: Added for `en_US`
 * `settings.option.experimental.unknownPlugin.description`: Added for `en_US`
+
+Update 25/02/2022 15:30 UTC
+
+* `action.moveToTop`: Changed to `Move out of Folder` instead of `Move to top`
+
+Update 27/02/2022 18:30 UTC
+
+* `settings.notyf.updateCider.update-not-available`: Added for `en_US`
+* `settings.notyf.updateCider.update-timeout`: Added for `en_US`
+* `settings.notyf.updateCider.update-downloaded`: Added for `en_US`
+* `settings.notyf.updateCider.update-error`: Added for `en_US`
+
+Update 28/02/2022 13:00 UTC
+
+* `term.time.days`: Added for `en_US`
+* `term.time.day`: Added for `en_US`
+
+Update 10/3/2022 14:00 UTC
+* `settings.header.window`: Added for `en_US`
+* `settings.header.window.description`: Added for `en_US`
+* `settings.option.window.openOnStartup`: Added for `en_US`
+* `settings.option.window.openOnStartup.hidden`: Added for `en_US`
+
+Update 20/3/2022 00:01 UTC
+* `term.creditDesignedBy`: Added for `en_US`
+
+Update 29/3/2022 04:00 UTC
+* `settings.option.audio.enableAdvancedFunctionality.ciderPPE.description`: Changed for `en_US` (Deleted for all language files)
