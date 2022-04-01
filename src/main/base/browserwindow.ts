@@ -549,6 +549,9 @@ export class BrowserWindow {
      * Starts the session for the renderer process.
      */
     private startSession(): void {
+
+
+
         // intercept "https://js-cdn.music.apple.com/hls.js/2.141.1/hls.js/hls.js" and redirect to local file "./apple-hls.js" instead
         BrowserWindow.win.webContents.session.webRequest.onBeforeRequest(
             {
@@ -575,9 +578,17 @@ export class BrowserWindow {
                 details: { url: string; requestHeaders: { [x: string]: string } },
                 callback: (arg0: { requestHeaders: any }) => void
             ) => {
+
+                // modify the headers to bypass the CORS policy ("connect-src 'self'")
+                // to allow for connection to http://localhost:9000
+                details.requestHeaders["Access-Control-Allow-Origin"] = "*";
+                details.requestHeaders["Access-Control-Allow-Headers"] = "*";
+                details.requestHeaders["Access-Control-Allow-Methods"] = "*";
+                details.requestHeaders["Access-Control-Allow-Credentials"] = "true";
+                details.requestHeaders["sec-fetch-site"] = "same-site";
+                details.requestHeaders["DNT"] = "1";
+
                 if (details.url === "https://buy.itunes.apple.com/account/web/info") {
-                    details.requestHeaders["sec-fetch-site"] = "same-site";
-                    details.requestHeaders["DNT"] = "1";
                     let itspod = await BrowserWindow.win.webContents.executeJavaScript(
                         `window.localStorage.getItem("music.ampwebplay.itspod")`
                     );
