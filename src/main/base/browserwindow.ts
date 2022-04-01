@@ -1,18 +1,18 @@
-import {join} from "path";
-import {app, BrowserWindow as bw, ipcMain, ShareMenu, shell} from "electron";
+import { join } from "path";
+import { app, BrowserWindow as bw, ipcMain, ShareMenu, shell } from "electron";
 import * as windowStateKeeper from "electron-window-state";
 import * as express from "express";
 import * as getPort from "get-port";
-import {search} from "youtube-search-without-api-key";
-import {existsSync, rmSync, mkdirSync, readdirSync, readFileSync, writeFileSync, statSync} from "fs";
-import {Stream} from "stream";
-import {networkInterfaces} from "os";
+import { search } from "youtube-search-without-api-key";
+import { existsSync, rmSync, mkdirSync, readdirSync, readFileSync, writeFileSync, statSync } from "fs";
+import { Stream } from "stream";
+import { networkInterfaces } from "os";
 import * as mm from 'music-metadata';
 import fetch from 'electron-fetch'
-import {wsapi} from "./wsapi";
-import {utils} from './utils';
-import {Plugins} from "./plugins";
-import {watch} from "chokidar";
+import { wsapi } from "./wsapi";
+import { utils } from './utils';
+import { Plugins } from "./plugins";
+import { watch } from "chokidar";
 import * as os from "os";
 const wallpaper = require('wallpaper');
 
@@ -239,7 +239,7 @@ export class BrowserWindow {
         show: false,
         // backgroundColor: "#1E1E1E",
         titleBarStyle: 'hidden',
-        trafficLightPosition: {x: 15, y: 20},
+        trafficLightPosition: { x: 15, y: 20 },
         webPreferences: {
             experimentalFeatures: true,
             nodeIntegration: true,
@@ -249,7 +249,7 @@ export class BrowserWindow {
             webviewTag: true,
             plugins: true,
             nodeIntegrationInWorker: false,
-            webSecurity: false,
+            // webSecurity: false,
             preload: join(utils.getPath('srcPath'), "./preload/cider-preload.js"),
         },
     };
@@ -299,7 +299,7 @@ export class BrowserWindow {
      * @yields {object} Electron browser window
      */
     async createWindow(): Promise<Electron.BrowserWindow> {
-        this.clientPort = await getPort({port: 9000});
+        this.clientPort = await getPort({ port: 9000 });
         BrowserWindow.verifyFiles();
         this.StartWatcher(utils.getPath('themes'));
 
@@ -531,7 +531,7 @@ export class BrowserWindow {
         remote.use(express.static(join(utils.getPath('srcPath'), "./web-remote/")))
         remote.set("views", join(utils.getPath('srcPath'), "./web-remote/views"));
         remote.set("view engine", "ejs");
-        getPort({port: 6942}).then((port) => {
+        getPort({ port: 6942 }).then((port) => {
             this.remotePort = port;
             // Start Remote Discovery
             this.broadcastRemote()
@@ -584,11 +584,11 @@ export class BrowserWindow {
                     if (itspod != null)
                         details.requestHeaders["Cookie"] = `itspod=${itspod}`;
                 }
-                callback({requestHeaders: details.requestHeaders});
+                callback({ requestHeaders: details.requestHeaders });
             }
         );
 
-        let location = `http://localhost:${this.clientPort}/`;
+        let location = `https://beta.music.apple.com/`;
 
         if (app.isPackaged) {
             BrowserWindow.win.loadURL(location);
@@ -607,6 +607,12 @@ export class BrowserWindow {
          * ipcMain Events
          ****************************************************************************************************************** */
 
+        ipcMain.on("fetch", async (event, arg) => {
+            let response = await fetch(arg);
+            event.returnValue = await response.text();
+        });
+
+
         ipcMain.on("get-wallpaper", async (event) => {
             const wpPath: string = await wallpaper.get();
             // get the wallpaper and encode it to base64 then return
@@ -620,7 +626,7 @@ export class BrowserWindow {
             // remove WidevineCDM from appdata folder
             const widevineCdmPath = join(app.getPath("userData"), "./WidevineCdm");
             if (existsSync(widevineCdmPath)) {
-                rmSync(widevineCdmPath, {recursive: true, force: true})
+                rmSync(widevineCdmPath, { recursive: true, force: true })
             }
             // reinstall WidevineCDM
             app.relaunch()
@@ -892,7 +898,7 @@ export class BrowserWindow {
 
         //Fullscreen
         ipcMain.on('detachDT', (_event, _) => {
-            BrowserWindow.win.webContents.openDevTools({mode: 'detach'});
+            BrowserWindow.win.webContents.openDevTools({ mode: 'detach' });
         })
 
         ipcMain.handle('relaunchApp', (_event, _) => {
@@ -1010,21 +1016,21 @@ export class BrowserWindow {
                 return Math.max(-32768, Math.min(32768, v)); // clamp
             }
 
-            function bitratechange(e: any){
+            function bitratechange(e: any) {
                 var t = e.length;
                 let sampleRate = 96.0;
                 let outputSampleRate = 48.0;
                 var s = 0,
-                o = sampleRate / outputSampleRate,
-                u = Math.ceil(t * outputSampleRate / sampleRate),
-                a = new Int16Array(u);
+                    o = sampleRate / outputSampleRate,
+                    u = Math.ceil(t * outputSampleRate / sampleRate),
+                    a = new Int16Array(u);
                 for (let i = 0; i < u; i++) {
-                  a[i] = e[Math.floor(s)];
-                  s += o;
+                    a[i] = e[Math.floor(s)];
+                    s += o;
                 }
-          
+
                 return a;
-             }
+            }
 
             let newaudio = quantization(leftpcm, rightpcm);
             //let newaudio = [leftpcm, rightpcm];
@@ -1087,8 +1093,8 @@ export class BrowserWindow {
                     console.log('sc', SoundCheckTag)
                     BrowserWindow.win.webContents.send('SoundCheckTag', SoundCheckTag)
                 }).catch(err => {
-                console.log(err)
-            });
+                    console.log(err)
+                });
         });
 
         ipcMain.on('check-for-update', async (_event) => {
@@ -1199,10 +1205,10 @@ export class BrowserWindow {
         // Set window Handler
         BrowserWindow.win.webContents.setWindowOpenHandler((x: any) => {
             if (x.url.includes("apple") || x.url.includes("localhost")) {
-                return {action: "allow"};
+                return { action: "allow" };
             }
             shell.openExternal(x.url).catch(console.error);
-            return {action: "deny"};
+            return { action: "deny" };
         });
     }
 
@@ -1258,7 +1264,7 @@ export class BrowserWindow {
             "CtlN": "Cider",
             "iV": "196623"
         };
-        let server2 = mdns.createAdvertisement(x, `${await getPort({port: 3839})}`, {
+        let server2 = mdns.createAdvertisement(x, `${await getPort({ port: 3839 })}`, {
             name: encoded,
             txt: txt_record
         });

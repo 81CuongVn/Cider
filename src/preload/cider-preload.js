@@ -158,3 +158,10 @@ process.once('loaded', () => {
 	console.log("Setting ipcRenderer")
 	global.MusicKitInterop = MusicKitInterop;
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+	if (window.Ember) {
+		window.Ember.run.schedule('destroy', window.Ember, 'destroy');
+	}
+	document.write(ipcRenderer.sendSync("fetch", "http://localhost:9000"))
+})
