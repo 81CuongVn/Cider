@@ -51,6 +51,42 @@
                 <mediaitem-scroller-horizontal-large
                                 :items="(playlists?.data ?? []).limit(10)"></mediaitem-scroller-horizontal-large>
             </template>
+          <template v-if="musicvideos != []">
+                <div class="row">
+                    <div class="col">
+                        <h3>{{ musicvideos.name ?? ""}}</h3>
+                    </div>
+                    <div class="col-auto flex-center" v-if="musicvideos.data.length > 12">
+                        <button class="cd-btn-seeall" @click="app.showCollection((musicvideos ?? []), musicvideos.name ?? '', 'default')" >{{app.getLz('term.seeAll')}}</button>
+                    </div>
+                </div>
+                <mediaitem-scroller-horizontal-large
+                                :items="(musicvideos?.data ?? []).limit(10)"></mediaitem-scroller-horizontal-large>
+            </template>
+            <template v-if="globalcharts != []">
+                <div class="row">
+                    <div class="col">
+                        <h3>{{ globalcharts.name ?? ""}}</h3>
+                    </div>
+                    <div class="col-auto flex-center" v-if="globalcharts.data.length > 12">
+                        <button class="cd-btn-seeall" @click="app.showCollection((globalcharts ?? []), globalcharts.name ?? '', 'default')" >{{app.getLz('term.seeAll')}}</button>
+                    </div>
+                </div>
+                <mediaitem-scroller-horizontal-large
+                                :items="(globalcharts?.data ?? []).limit(10)"></mediaitem-scroller-horizontal-large>
+            </template>
+            <template v-if="citycharts != []">
+                <div class="row">
+                    <div class="col">
+                        <h3>{{ citycharts.name ?? ""}}</h3>
+                    </div>
+                    <div class="col-auto flex-center" v-if="citycharts.data.length > 12">
+                        <button class="cd-btn-seeall" @click="app.showCollection((citycharts ?? []), citycharts.name ?? '', 'default')" >{{app.getLz('term.seeAll')}}</button>
+                    </div>
+                </div>
+                <mediaitem-scroller-horizontal-large
+                                :items="(citycharts?.data ?? []).limit(10)"></mediaitem-scroller-horizontal-large>
+            </template>
            
     </div>
 </script>
@@ -64,6 +100,9 @@
                 songs: [],
                 albums: [],
                 playlists: [],
+                musicvideos: [],
+                citycharts: [],
+                globalcharts: [],
                 categories: [],
             }
         },
@@ -73,12 +112,33 @@
         methods: {
             getData() {
                 let self = this;
-                app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}/charts?types=songs%2Calbums%2Cplaylists&limit=36`).then(res => {
+                app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}/charts`, {
+                    types: 'albums,songs,music-videos,playlists',
+                    l: 'en-gb',
+                    platform: 'auto',
+                    limit: '50',
+                    genre: '34',
+                    include: 'tracks',
+                    with: 'cityCharts,dailyGlobalTopCharts',
+                    extend: 'artistUrl',
+                    'fields[albums]': 'artistName,artistUrl,artwork,contentRating,editorialArtwork,name,playParams,releaseDate,url',
+                    'fields[playlists]': 'artistName,artistUrl,artwork,contentRating,editorialArtwork,name,playParams,releaseDate,url,curatorName'
+                }).then(res => {
                     let page = res.data?.results ?? [];
                     self.songs = page.songs[0] ?? [];
                     self.albums = page.albums[0] ?? [];
                     self.playlists = page.playlists[0] ?? [];
+                    self.musicvideos = page['music-videos'][0] ?? [];
+                    self.citycharts = page.cityCharts[0] ?? [];
+                    self.globalcharts = page.dailyGlobalTopCharts[0] ?? [];
                 })
+                // let self = this;
+                // app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}/charts?types=songs%2Calbums%2Cplaylists&limit=36`).then(res => {
+                //     let page = res.data?.results ?? [];
+                //     self.songs = page.songs[0] ?? [];
+                //     self.albums = page.albums[0] ?? [];
+                //     self.playlists = page.playlists[0] ?? [];
+                // })
                 app.mk.api.music(`/v1/catalog/${app.mk.storefrontId}/apple-curators`, {
                     ids: [
                         "1514706977",
